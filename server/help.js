@@ -1,7 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const xlsx = require("node-xlsx").default;
-let cwd = path.join(__dirname, "cache");
+import fs from "fs";
+import path from "path";
+import xlsx from "node-xlsx";
+import { fileURLToPath } from "url";
+
+let cwd = path.join(path.dirname(fileURLToPath(import.meta.url)), "./cache");
 
 if (!fs.existsSync(cwd)) {
   fs.mkdirSync(cwd);
@@ -137,7 +139,7 @@ function shuffle(arr) {
   }
 }
 
-module.exports = {
+export {
   loadTempData,
   loadXML,
   shuffle,

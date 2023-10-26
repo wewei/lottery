@@ -6,7 +6,7 @@
  * text: 奖品标题
  * img: 图片地址
  */
-const prizes = [
+export const prizes = [
   {
     type: 0,
     count: 1000,
@@ -67,15 +67,9 @@ const prizes = [
 /**
  * 一次抽取的奖品个数与prizes对应
  */
-const EACH_COUNT = [1, 1, 5, 6, 7, 8, 9, 10];
+export const EACH_COUNT = [1, 1, 5, 6, 7, 8, 9, 10];
 
 /**
  * 卡片公司名称标识
  */
-const COMPANY = "MoShang";
-
-module.exports = {
-  prizes,
-  EACH_COUNT,
-  COMPANY
-};
+export const COMPANY = "MoShang";

@@ -1,9 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
+import App from "./App";
 
-function App() {
-    return <div>Hello, World!</div>;
-}
 const root = createRoot(document.getElementById("app-root"));
 
 root.render(<App />);

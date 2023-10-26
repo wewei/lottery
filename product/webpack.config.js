@@ -17,10 +17,13 @@ module.exports = {
     publicPath: '/',
     filename: "[name].bundle.js"
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
+  },
   module: {
     rules: [
       {
-        test: /(\.jsx|\.js)$/,
+        test: /\.jsx?$/,
         use: {
           loader: "babel-loader"
         },

@@ -1,24 +1,25 @@
-const express = require("express");
-const opn = require("opn");
-const bodyParser = require("body-parser");
-const path = require("path");
-const chokidar = require("chokidar");
-const cfg = require("./config");
-const useragent = require("express-useragent");
+import express from "express";
+import opn from "opn";
+import bodyParser from "body-parser";
+import path, { dirname } from "path";
+import chokidar from "chokidar";
+import useragent from "express-useragent";
+import * as cfg from "./config.js";
 
-const {
+import {
   loadXML,
   loadTempData,
   writeXML,
   saveDataFile,
   shuffle,
   saveErrorDataFile
-} = require("./help");
+} from "./help.js";
+import { fileURLToPath } from "url";
 
 let app = express(),
   router = express.Router(),
   cwd = process.cwd(),
-  dataBath = __dirname,
+  dataPath = path.dirname(fileURLToPath(import.meta.url)),
   port = 8090,
   curData = {},
   luckyData = {},
@@ -45,15 +46,15 @@ if (process.argv.length > 2) {
 
 app.use(useragent.express());
 
-app.use(function(req, res, next) {
-  if (req.method.toLowerCase() === "get") {
-    if (!req.useragent.isEdge) {
-      res.status(401).end();
-      return;
-    }
-  }
-  next();
-});
+// app.use(function(req, res, next) {
+//   if (req.method.toLowerCase() === "get") {
+//     if (!req.useragent.isEdge) {
+//       res.status(401).end();
+//       return;
+//     }
+//   }
+//   next();
+// });
 
 app.use(express.static(cwd));
 
@@ -222,7 +223,7 @@ function loadData() {
   let cfgData = {};
 
   // curData.users = loadXML(path.join(cwd, "data/users.xlsx"));
-  curData.users = loadXML(path.join(dataBath, "data/users.xlsx"));
+  curData.users = loadXML(path.join(dataPath, "./data/users.xlsx"));
   // 重新洗牌
   shuffle(curData.users);
 
@@ -260,28 +261,26 @@ function getLeftUsers() {
 
 loadData();
 
-module.exports = {
-  run: function(devPort, noOpen) {
-    let openBrowser = true;
-    if (process.argv.length > 3) {
-      if (process.argv[3] && (process.argv[3] + "").toLowerCase() === "n") {
-        openBrowser = false;
-      }
+export function run(devPort, noOpen) {
+  let openBrowser = true;
+  if (process.argv.length > 3) {
+    if (process.argv[3] && (process.argv[3] + "").toLowerCase() === "n") {
+      openBrowser = false;
     }
-
-    if (noOpen) {
-      openBrowser = noOpen !== "n";
-    }
-
-    if (devPort) {
-      port = devPort;
-    }
-
-    let server = app.listen(port, () => {
-      let host = server.address().address;
-      let port = server.address().port;
-      global.console.log(`lottery server listenig at http://${host}:${port}`);
-      openBrowser && opn(`http://127.0.0.1:${port}`);
-    });
   }
-};
+
+  if (noOpen) {
+    openBrowser = noOpen !== "n";
+  }
+
+  if (devPort) {
+    port = devPort;
+  }
+
+  let server = app.listen(port, () => {
+    let host = server.address().address;
+    let port = server.address().port;
+    global.console.log(`lottery server listenig at http://${host}:${port}`);
+    openBrowser && opn(`http://127.0.0.1:${port}`);
+  });
+}
