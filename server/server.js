@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const chokidar = require("chokidar");
 const cfg = require("./config");
+const useragent = require("express-useragent");
 
 const {
   loadXML,
@@ -42,7 +43,20 @@ if (process.argv.length > 2) {
   port = process.argv[2];
 }
 
+app.use(useragent.express());
+
+app.use(function(req, res, next) {
+  if (req.method.toLowerCase() === "get") {
+    if (!req.useragent.isEdge) {
+      res.status(401).end();
+      return;
+    }
+  }
+  next();
+});
+
 app.use(express.static(cwd));
+
 
 //请求地址为空，默认重定向到index.html文件
 app.get("/", (req, res) => {
