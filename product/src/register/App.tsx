@@ -8,8 +8,8 @@ import axios from "axios";
 
 const deviceId = new DeviceUUID().get();
 
-function register(alias: string) {
-    axios.post('/api/register', { alias, deviceId }).then(res => {
+function register(userId: string) {
+    axios.post('/api/register', { userId, deviceId }).then(res => {
         console.log(res.data);
     });
 }
