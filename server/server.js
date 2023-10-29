@@ -5,6 +5,7 @@ import path, { dirname } from "path";
 import chokidar from "chokidar";
 import useragent from "express-useragent";
 import * as cfg from "./config.js";
+import apiRouter from "./api.js";
 
 import {
   loadXML,
@@ -216,6 +217,7 @@ function setErrorData(data) {
   return saveErrorDataFile(errorData);
 }
 
+app.use('/api', apiRouter);
 app.use(router);
 
 function loadData() {
@@ -281,6 +283,6 @@ export function run(devPort, noOpen) {
     let host = server.address().address;
     let port = server.address().port;
     global.console.log(`lottery server listenig at http://${host}:${port}`);
-    openBrowser && opn(`http://127.0.0.1:${port}`);
+    // openBrowser && opn(`http://127.0.0.1:${port}`);
   });
 }

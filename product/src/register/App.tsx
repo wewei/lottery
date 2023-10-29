@@ -1,11 +1,25 @@
 import * as React from "react";
 import { FontSizes } from "@fluentui/react/lib/Styling";
-import { TextField } from "@fluentui/react/lib/TextField";
+import { ITextField, TextField } from "@fluentui/react/lib/TextField";
 import { Stack } from "@fluentui/react/lib/Stack";
 import { PrimaryButton } from "@fluentui/react/lib/Button";
 import { DeviceUUID } from "device-uuid";
+import axios from "axios";
+
+const deviceId = new DeviceUUID().get();
+
+function register(alias: string) {
+    axios.post('/api/register', { alias, deviceId }).then(res => {
+        console.log(res.data);
+    });
+}
 
 export default function App(): JSX.Element {
+    const textRef = React.useRef<ITextField>();
+    const submit = React.useCallback(() => {
+        register(textRef.current?.value);
+    }, [textRef]);
+
     return <Stack verticalAlign="center" horizontalAlign="center" style={{
         position: "fixed",
         width: "100%",
@@ -17,15 +31,13 @@ export default function App(): JSX.Element {
                 field: {
                     fontSize: FontSizes.xLarge
                 },
-            }}></TextField>
+            }} componentRef={textRef}></TextField>
         </Stack.Item>
         <Stack.Item>
             <PrimaryButton style={{
                 fontSize: FontSizes.xLarge
-            }}>Submit</PrimaryButton>
+            }} onClick={submit}>Submit</PrimaryButton>
         </Stack.Item>
-        <Stack.Item>
-            {new DeviceUUID().get()}
-        </Stack.Item>
+        <Stack.Item>{deviceId}</Stack.Item>
     </Stack>;
 }
