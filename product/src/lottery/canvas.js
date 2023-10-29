@@ -5,14 +5,13 @@
   })();
   var canvas = document.getElementById("canvas");
 
-  ~~(function setSize() {
+  function setSize() {
     //定义canvas的宽高，让他跟浏览器的窗口的宽高相同
-    window.onresize = arguments.callee;
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w;
-    canvas.height = h;
-  })();
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.onresize = setSize;
+  setSize();
 
   var c = canvas.getContext("2d");
 

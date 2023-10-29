@@ -1,16 +1,15 @@
-const webpack = require("webpack");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const path = require("path");
-const _ = require('lodash');
+import webpack from "webpack";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import CopyWebpackPlugin from "copy-webpack-plugin";
+import path from "path";
+import _ from 'lodash';
 
 const entry = {
   lottery: './src/lottery/index.js',
   register: './src/register/index.tsx',
 };
 
-module.exports = {
+export default {
   entry,
   output: {
     path: path.join(__dirname, "/dist"),
@@ -75,8 +74,8 @@ module.exports = {
       ],
     }),
     ..._.keys(entry).map(ent => new HtmlWebpackPlugin({
-      template: path.join(__dirname, `/src/${ent}/index.html`),
-      filename: `/${ent}/index.html`,
+      template: path.join(__dirname, `src/${ent}/index.html`),
+      filename: path.resolve(__dirname, `dist/${ent}/index.html`),
       chunks: [ent],
       minify: {
         // 移除空属性
@@ -91,5 +90,14 @@ module.exports = {
       hash: true,
       inject: true
     })),
-  ]
+  ],
+  devServer: {
+    port: 9000,
+    hot: true,
+    open: true,
+    proxy: {
+      "*": "http://localhost:18888",
+    },
+  },
+  devtool: "source-map",
 };
