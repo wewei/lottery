@@ -91,13 +91,5 @@ export default {
       inject: true
     })),
   ],
-  devServer: {
-    port: 9000,
-    hot: true,
-    open: true,
-    proxy: {
-      "*": "http://localhost:18888",
-    },
-  },
   devtool: "source-map",
 };
